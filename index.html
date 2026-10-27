@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Market Model Lab</title>
+<style>
+:root{
+  --bg:#f6f4ef; --card:#ffffff; --ink:#1c2330; --muted:#667085; --line:#e5e1d8;
+  --accent:#1f5eff; --accent2:#12a37f; --warn:#b42318; --track:#e6e9f2;
+  --shadow:0 1px 2px rgba(20,30,50,.05),0 8px 24px rgba(20,30,50,.06);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f141c; --card:#171e29; --ink:#eef1f6; --muted:#98a2b3; --line:#263041;
+    --accent:#6b93ff; --accent2:#3ccfa5; --warn:#ff8a7a; --track:#263041;
+    --shadow:none; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f141c; --card:#171e29; --ink:#eef1f6; --muted:#98a2b3; --line:#263041;
+  --accent:#6b93ff; --accent2:#3ccfa5; --warn:#ff8a7a; --track:#263041;
+  --shadow:none; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.5; padding:clamp(16px,4vw,40px);
+}
+.wrap{max-width:1040px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:24px}
+h1{font-size:clamp(24px,4vw,34px);margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0;max-width:560px}
+.theme{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;
+  padding:8px 14px;cursor:pointer;font-size:14px}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:20px}
+@media(max-width:820px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;
+  padding:7px 12px;font-size:13px;cursor:pointer;transition:.15s}
+.chip:hover{border-color:var(--accent)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.evt{font-size:12px;color:var(--muted);margin:12px 0 6px}
+.ctl{margin-top:22px}
+.ctl-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ctl label{font-weight:600}
+.num{width:96px;text-align:right;border:1px solid var(--line);background:var(--bg);color:var(--ink);
+  border-radius:10px;padding:6px 10px;font:inherit}
+.hint{font-size:13px;color:var(--muted);margin:4px 0 0}
+input[type=range]{width:100%;margin:10px 0 0;accent-color:var(--accent);height:6px}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;margin-left:8px;
+  vertical-align:middle;font-weight:600}
+.sig{background:rgba(18,163,127,.15);color:var(--accent2)}
+.nosig{background:rgba(180,35,24,.12);color:var(--warn)}
+.big{font-size:clamp(44px,8vw,68px);font-weight:750;letter-spacing:-.03em;line-height:1;
+  font-variant-numeric:tabular-nums}
+.lbl{color:var(--muted);margin:6px 0 18px}
+.bars{display:grid;gap:10px;margin:8px 0 14px}
+.bar-row{display:grid;grid-template-columns:62px 1fr 74px;gap:10px;align-items:center;font-size:14px}
+.track{background:var(--track);border-radius:8px;height:26px;overflow:hidden}
+.fill{height:100%;border-radius:8px;transition:width .25s ease}
+.val{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.verdict{font-weight:600;margin:0 0 8px}
+.note{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+  font-size:14px;color:var(--ink);margin:10px 0 0}
+.elast{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.el{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.el b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.el span{font-size:12px;color:var(--muted)}
+footer{margin-top:22px;font-size:13px;color:var(--muted)}
+.caveat{color:var(--warn);font-weight:600;margin:0 0 10px}
+footer a{color:var(--accent)}
+details{margin-top:10px}
+summary{cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>The Market Model - Nifty 50 Macro Simulator</h1>
+      <p class="sub">Change repo rate, GDP and CPI to see what a published regression model estimates for the Nifty 50, then compare it with real market history.</p>
+    </div>
+    <button class="theme" id="theme" type="button" aria-label="Toggle dark mode">Dark mode</button>
+  </header>
+
+  <div class="grid">
+    <section class="card" aria-label="Inputs">
+      <h2>Inputs</h2>
+      <div id="presets"></div>
+
+      <div class="ctl">
+        <div class="ctl-top"><label for="repo">Repo rate (%)<span class="badge nosig">not significant</span></label>
+          <input class="num" id="repoN" type="number" step="0.05" min="0.1"></div>
+        <input id="repo" type="range" min="2" max="12" step="0.05">
+        <p class="hint">Higher repo rate, slightly lower Nifty (coefficient -0.0823).</p>
+      </div>
+      <div class="ctl">
+        <div class="ctl-top"><label for="gdp">Nominal GDP (USD billion)<span class="badge sig">significant</span></label>
+          <input class="num" id="gdpN" type="number" step="10" min="1"></div>
+        <input id="gdp" type="range" min="500" max="6000" step="10">
+        <p class="hint">1% more GDP, about 1.53% higher Nifty (coefficient +1.5284).</p>
+      </div>
+      <div class="ctl">
+        <div class="ctl-top"><label for="cpi">CPI (1960 = 100)<span class="badge nosig">not significant</span></label>
+          <input class="num" id="cpiN" type="number" step="10" min="1"></div>
+        <input id="cpi" type="range" min="2000" max="12000" step="10">
+        <p class="hint">Higher CPI, slightly lower Nifty (coefficient -0.2437).</p>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Result">
+      <h2>Model estimate</h2>
+      <div class="big" id="out">0</div>
+      <p class="lbl">Estimated Nifty 50 level</p>
+      <div class="bars" id="bars"></div>
+      <p class="verdict" id="verdict"></p>
+      <div class="note" id="note" hidden></div>
+      <div class="elast">
+        <div class="el"><b>-0.08</b><span>Repo rate</span></div>
+        <div class="el"><b>+1.53</b><span>GDP</span></div>
+        <div class="el"><b>-0.24</b><span>CPI</span></div>
+      </div>
+      <p class="hint" style="text-align:center">Elasticities: if an input rises 1%, the Nifty changes by this many %.</p>
+    </section>
+  </div>
+
+  <footer>
+    <p class="caveat">Teaching tool, not investment advice. In the paper only GDP is statistically significant; the repo rate and CPI effects cannot be told apart from zero. Correlation is not causation.</p>
+    <p><b>Model source:</b> Jain, N. (2025). A Study of Repo Rate’s Impact on The Indian Stock Market. <i>Educational Administration: Theory and Practice, 31</i>(1), 748-751.
+      <a href="https://doi.org/10.67145/kuey.v31i1.9983" target="_blank" rel="noopener">https://doi.org/10.67145/kuey.v31i1.9983</a> (CC BY 4.0)</p>
+    <details>
+      <summary>How the model and data work</summary>
+      <p>The paper’s log-log regression is ln(Nifty) = α + β₁ln(Repo) + β₂ln(GDP) + β₃ln(CPI), fitted on 24 annual observations (March 2001 to March 2024) with adjusted R² of 94.9%. The paper reports the three coefficients but not the intercept α or the raw data, so α here is calibrated so that the model fits the six historical snapshots on average. Because of that, absolute levels are indicative; the sensitivities to each input come directly from the paper.</p>
+      <p>Snapshot data: Nifty closes and repo rates are 31 March values. GDP is approximate World Bank nominal GDP for the calendar year. CPI is CPI-IW (fiscal-year average) linked to a 1960 base using official linking factors, so treat it as approximate.</p>
+    </details>
+  </footer>
+</div>
+
+<script>
+(function () {
+  // Coefficients from Jain (2025)
+  var B = { repo: -0.0823, gdp: 1.5284, cpi: -0.2437 };
+
+  // [repo %, GDP USD bn, CPI 1960=100, actual Nifty close]
+  var EVENTS = [
+    { name: "2008 financial crisis", note: "Global crash. The repo rate was cut and GDP in USD kept rising, yet the Nifty fell about 36%. The model cannot see panic or foreign capital flight, so it misses badly.",
+      pts: [["Mar 2008", 7.75, 1199, 3172, 4734.50], ["Mar 2009", 5.00, 1342, 3309, 3020.95]] },
+    { name: "2016 demonetisation", note: "Cash ban in November 2016. The Nifty still rose over the year, and the model gets the direction right.",
+      pts: [["Mar 2016", 6.75, 2295, 6002, 7738.40], ["Mar 2017", 6.25, 2652, 6299, 9173.75]] },
+    { name: "2020 lockdown", note: "COVID lockdown. Markets crashed in March 2020 and then rallied as rates were cut. Annual data hides the crash itself.",
+      pts: [["Mar 2020", 4.40, 2672, 7325, 8597.75], ["Mar 2021", 4.00, 3150, 7754, 14690.70]] }
+  ];
+
+  function core(r, g, c) {
+    return B.repo * Math.log(r) + B.gdp * Math.log(g) + B.cpi * Math.log(c);
+  }
+  // Intercept calibrated on the six snapshots (mean log error = 0)
+  var all = [];
+  EVENTS.forEach(function (e) { e.pts.forEach(function (p) { all.push(p); }); });
+  var ALPHA = all.reduce(function (s, p) {
+    return s + Math.log(p[4]) - core(p[1], p[2], p[3]);
+  }, 0) / all.length;
+  function predict(r, g, c) { return Math.exp(ALPHA + core(r, g, c)); }
+
+  var $ = function (id) { return document.getElementById(id); };
+  var fmt = function (n) { return Math.round(n).toLocaleString("en-IN"); };
+  var keys = ["repo", "gdp", "cpi"];
+  var active = null;
+
+  // Build preset buttons
+  var host = $("presets");
+  EVENTS.forEach(function (e, ei) {
+    var t = document.createElement("div"); t.className = "evt"; t.textContent = e.name; host.appendChild(t);
+    var row = document.createElement("div"); row.className = "chips"; host.appendChild(row);
+    e.pts.forEach(function (p, pi) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "chip"; b.textContent = p[0];
+      b.dataset.id = ei + "-" + pi;
+      b.onclick = function () { load(ei, pi); };
+      row.appendChild(b);
+    });
+  });
+
+  function setInputs(r, g, c) {
+    [r, g, c].forEach(function (v, i) { $(keys[i]).value = v; $(keys[i] + "N").value = v; });
+  }
+  function load(ei, pi) {
+    var p = EVENTS[ei].pts[pi];
+    setInputs(p[1], p[2], p[3]);
+    active = { e: ei, p: pi };
+    render();
+  }
+  function read() {
+    return keys.map(function (k) { return parseFloat($(k + "N").value); });
+  }
+
+  function bar(name, v, max, color) {
+    return '<div class="bar-row"><span>' + name + '</span><div class="track"><div class="fill" style="width:' +
+      (100 * v / max).toFixed(1) + '%;background:' + color + '"></div></div><span class="val">' + fmt(v) + '</span></div>';
+  }
+
+  function render() {
+    var v = read();
+    if (v.some(function (x) { return !(x > 0); })) return;
+    var model = predict(v[0], v[1], v[2]);
+    $("out").textContent = fmt(model);
+
+    document.querySelectorAll(".chip").forEach(function (c) {
+      c.classList.toggle("on", !!active && c.dataset.id === active.e + "-" + active.p);
+    });
+
+    var bars = $("bars"), verdict = $("verdict"), note = $("note");
+    if (active) {
+      var ev = EVENTS[active.e], actual = ev.pts[active.p][4];
+      var max = Math.max(model, actual) * 1.05;
+      bars.innerHTML = bar("Model", model, max, "var(--accent)") + bar("Actual", actual, max, "var(--accent2)");
+      var err = (model / actual - 1) * 100;
+      verdict.textContent = "The model is " + Math.abs(err).toFixed(1) + "% " + (err > 0 ? "above" : "below") + " the real Nifty close.";
+      note.hidden = false; note.textContent = ev.note;
+    } else {
+      bars.innerHTML = bar("Model", model, model * 1.05, "var(--accent)");
+      verdict.textContent = "Pick a historical date above to compare with the real Nifty 50.";
+      note.hidden = true;
+    }
+  }
+
+  // Wire up slider and number boxes (typing or dragging leaves preset mode)
+  keys.forEach(function (k) {
+    $(k).addEventListener("input", function () { $(k + "N").value = $(k).value; active = null; render(); });
+    $(k + "N").addEventListener("input", function () {
+      var x = parseFloat($(k + "N").value);
+      if (x > 0) $(k).value = x;
+      active = null; render();
+    });
+  });
+
+  // Theme toggle
+  var root = document.documentElement;
+  $("theme").onclick = function () {
+    var dark = root.dataset.theme ? root.dataset.theme === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = dark ? "light" : "dark";
+    $("theme").textContent = dark ? "Dark mode" : "Light mode";
+  };
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) $("theme").textContent = "Light mode";
+
+  load(0, 1);
+})();
+</script>
+</body>
+</html>
