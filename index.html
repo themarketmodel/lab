@@ -1,257 +1,137 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Market Model Lab</title>
+<meta name="description" content="The Market Model Lab: an interactive teaching tool exploring macroeconomic relationships with India's NIFTY 50.">
+<meta name="color-scheme" content="light">
+<title>The Market Model Lab | NIFTY 50</title>
 <style>
-:root{
-  --bg:#f6f4ef; --card:#ffffff; --ink:#1c2330; --muted:#667085; --line:#e5e1d8;
-  --accent:#1f5eff; --accent2:#12a37f; --warn:#b42318; --track:#e6e9f2;
-  --shadow:0 1px 2px rgba(20,30,50,.05),0 8px 24px rgba(20,30,50,.06);
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0f141c; --card:#171e29; --ink:#eef1f6; --muted:#98a2b3; --line:#263041;
-    --accent:#6b93ff; --accent2:#3ccfa5; --warn:#ff8a7a; --track:#263041;
-    --shadow:none; color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0f141c; --card:#171e29; --ink:#eef1f6; --muted:#98a2b3; --line:#263041;
-  --accent:#6b93ff; --accent2:#3ccfa5; --warn:#ff8a7a; --track:#263041;
-  --shadow:none; color-scheme:dark;
-}
-*{box-sizing:border-box}
-html,body{margin:0}
-body{
-  background:var(--bg); color:var(--ink);
-  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  line-height:1.5; padding:clamp(16px,4vw,40px);
-}
-.wrap{max-width:1040px;margin:0 auto}
-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:24px}
-h1{font-size:clamp(24px,4vw,34px);margin:0 0 6px;letter-spacing:-.02em}
-.sub{color:var(--muted);margin:0;max-width:560px}
-.theme{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;
-  padding:8px 14px;cursor:pointer;font-size:14px}
-.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:20px}
-@media(max-width:820px){.grid{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
-.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 14px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
-.chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;
-  padding:7px 12px;font-size:13px;cursor:pointer;transition:.15s}
-.chip:hover{border-color:var(--accent)}
-.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
-.evt{font-size:12px;color:var(--muted);margin:12px 0 6px}
-.ctl{margin-top:22px}
-.ctl-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.ctl label{font-weight:600}
-.num{width:96px;text-align:right;border:1px solid var(--line);background:var(--bg);color:var(--ink);
-  border-radius:10px;padding:6px 10px;font:inherit}
-.hint{font-size:13px;color:var(--muted);margin:4px 0 0}
-input[type=range]{width:100%;margin:10px 0 0;accent-color:var(--accent);height:6px}
-.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;margin-left:8px;
-  vertical-align:middle;font-weight:600}
-.sig{background:rgba(18,163,127,.15);color:var(--accent2)}
-.nosig{background:rgba(180,35,24,.12);color:var(--warn)}
-.big{font-size:clamp(44px,8vw,68px);font-weight:750;letter-spacing:-.03em;line-height:1;
-  font-variant-numeric:tabular-nums}
-.lbl{color:var(--muted);margin:6px 0 18px}
-.bars{display:grid;gap:10px;margin:8px 0 14px}
-.bar-row{display:grid;grid-template-columns:62px 1fr 74px;gap:10px;align-items:center;font-size:14px}
-.track{background:var(--track);border-radius:8px;height:26px;overflow:hidden}
-.fill{height:100%;border-radius:8px;transition:width .25s ease}
-.val{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
-.verdict{font-weight:600;margin:0 0 8px}
-.note{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;
-  font-size:14px;color:var(--ink);margin:10px 0 0}
-.elast{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
-.el{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
-.el b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
-.el span{font-size:12px;color:var(--muted)}
-footer{margin-top:22px;font-size:13px;color:var(--muted)}
-.caveat{color:var(--warn);font-weight:600;margin:0 0 10px}
-footer a{color:var(--accent)}
-details{margin-top:10px}
-summary{cursor:pointer}
+:root{--bg:#f5f6f8;--panel:#fff;--ink:#172033;--muted:#657087;--line:#e4e8ef;--blue:#315ccf;--blue-soft:#edf2ff;--teal:#167b62;--teal-soft:#eaf6f1;--amber:#94600c;--amber-soft:#fff5df;--shadow:0 8px 28px rgba(23,32,51,.055)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer}.wrap{max-width:1120px;margin:auto;padding:36px 22px 52px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:26px}.eyebrow{margin:0 0 8px;color:var(--blue);font-size:11px;font-weight:750;letter-spacing:.15em;text-transform:uppercase}
+h1{font-size:clamp(29px,4vw,42px);letter-spacing:-.045em;line-height:1.08;margin:0}.subtitle{color:var(--muted);max-width:700px;margin:12px 0 0}.top-tag{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 12px;font-size:12px;color:var(--muted);white-space:nowrap}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:22px;box-shadow:var(--shadow);min-width:0}.card h2{font-size:17px;margin:0;letter-spacing:-.02em}.intro{color:var(--muted);font-size:13px;margin:5px 0 18px}
+.event-group{margin:14px 0 5px;color:var(--muted);font-size:11px;font-weight:750;letter-spacing:.07em;text-transform:uppercase}.chips{display:flex;gap:7px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;padding:7px 10px;font-size:12px}.chip:hover,.chip.active{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
+.control{padding:16px 0;border-top:1px solid var(--line)}.control:first-of-type{margin-top:14px}.control-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.control label{font-weight:650}.number{width:112px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;text-align:right;color:var(--ink);background:#fff}.number:focus,input[type=range]:focus,button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+input[type=range]{width:100%;accent-color:var(--blue);margin:13px 0 0}.help{font-size:12px;color:var(--muted);margin:5px 0 0}.status{display:inline-block;border-radius:5px;padding:2px 6px;margin-left:5px;font-size:10px;font-weight:750;vertical-align:2px}.yes{background:var(--teal-soft);color:var(--teal)}.no{background:var(--amber-soft);color:var(--amber)}
+.result-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:750;color:var(--muted)}.big{font-size:clamp(43px,6vw,61px);font-weight:780;letter-spacing:-.06em;line-height:1.1;margin:8px 0 3px;font-variant-numeric:tabular-nums}.muted{color:var(--muted);font-size:13px}.change-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0}.stat{border:1px solid var(--line);border-radius:11px;padding:12px}.stat strong{display:block;font-size:20px;font-variant-numeric:tabular-nums}.stat span{font-size:11px;color:var(--muted)}.bars{display:grid;gap:10px;margin:18px 0}.bar-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}.track{height:9px;background:#edf0f5;border-radius:99px;overflow:hidden}.fill{height:100%;border-radius:99px;background:var(--blue)}.fill.actual{background:var(--teal)}
+.callout{background:var(--blue-soft);color:#24468f;border-radius:10px;padding:12px 14px;font-size:13px;margin-top:12px}.note{border:1px solid var(--line);background:#fafbfc;border-radius:10px;padding:12px 14px;font-size:13px;margin-top:10px}.full{margin-top:18px}.equation{background:#f7f8fb;border:1px solid var(--line);border-radius:10px;padding:14px;overflow-wrap:anywhere;font:13px/1.8 ui-monospace,SFMono-Regular,Menlo,monospace}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-top:13px}table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f7f8fb;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.06em}td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.explain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.explain{border:1px solid var(--line);border-radius:10px;padding:13px}.explain b{display:block;margin-bottom:4px}.explain p{font-size:12px;color:var(--muted);margin:0}
+details{border-top:1px solid var(--line);padding-top:13px;margin-top:14px}summary{font-weight:650;cursor:pointer}.prose{font-size:13px;color:var(--muted)}.prose p{margin:9px 0}.experiment-list{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.experiment{border:1px solid var(--line);border-radius:12px;padding:14px}.experiment h3{font-size:14px;margin:0 0 5px}.experiment p{font-size:12px;color:var(--muted);margin:0 0 11px}.experiment button{border:1px solid var(--line);border-radius:8px;background:#fff;padding:7px 10px;font-size:12px;color:var(--blue)}.question{margin-top:12px;padding:12px;background:#f7f8fb;border-radius:9px;font-size:13px}.question strong{display:block;margin-bottom:4px}
+.author{font-size:14px;color:var(--muted);max-width:850px}.footer{margin-top:20px;font-size:12px;color:var(--muted)}a{color:var(--blue);overflow-wrap:anywhere}.caution{font-weight:650;color:#80520b}
+@media(max-width:780px){.layout{grid-template-columns:1fr}.wrap{padding:24px 14px 38px}header{display:block}.top-tag{display:inline-block;margin-top:15px}.card{padding:18px}.explain-grid,.experiment-list{grid-template-columns:1fr}.change-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div>
-      <h1>The Market Model - Nifty 50 Macro Simulator</h1>
-      <p class="sub">Change repo rate, GDP and CPI to see what a published regression model estimates for the Nifty 50, then compare it with real market history.</p>
-    </div>
-    <button class="theme" id="theme" type="button" aria-label="Toggle dark mode">Dark mode</button>
-  </header>
+<main class="wrap">
+<header><div><p class="eyebrow">Economics · Interactive research tool</p><h1>The Market Model Lab</h1><p class="subtitle">An Interactive Macroeconomic Simulator for India’s NIFTY 50. Explore how a published regression relates repo rates, nominal GDP and consumer prices to the stock-market index.</p></div><span class="top-tag">Classroom edition</span></header>
 
-  <div class="grid">
-    <section class="card" aria-label="Inputs">
-      <h2>Inputs</h2>
-      <div id="presets"></div>
+<div class="layout">
+<section class="card" aria-labelledby="input-title">
+<h2 id="input-title">1. Adjust the macroeconomic inputs</h2><p class="intro">Start with a historical reference point, then change one or more variables.</p>
+<div id="presets"></div>
+<div class="control"><div class="control-head"><label for="repoN">Repo rate <span class="status no">Not significant</span></label><input class="number" id="repoN" type="number" min="0.1" max="12" step="0.05" value="5"></div><input id="repo" type="range" min="2" max="12" step="0.05" value="5"><p class="help">Percent per annum · coefficient −0.0823 · p = 0.677</p></div>
+<div class="control"><div class="control-head"><label for="gdpN">Nominal GDP <span class="status yes">Significant</span></label><input class="number" id="gdpN" type="number" min="500" max="6000" step="10" value="1342"></div><input id="gdp" type="range" min="500" max="6000" step="10" value="1340"><p class="help">USD billions · coefficient +1.5284 · reported p = 0.000 (p &lt; 0.001 after rounding)</p></div>
+<div class="control"><div class="control-head"><label for="cpiN">CPI index</label><input class="number" id="cpiN" type="number" min="1" max="12000" step="10" value="3309"></div><input id="cpi" type="range" min="2000" max="12000" step="10" value="3310"><p class="help">Linked index, 1960 = 100 · coefficient −0.2437 · p = 0.568</p></div>
+<p class="help">The sliders and number fields are linked. Selecting a historical point resets all three inputs and the comparison baseline.</p>
+</section>
 
-      <div class="ctl">
-        <div class="ctl-top"><label for="repo">Repo rate (%)<span class="badge nosig">not significant</span></label>
-          <input class="num" id="repoN" type="number" step="0.05" min="0.1"></div>
-        <input id="repo" type="range" min="2" max="12" step="0.05">
-        <p class="hint">Higher repo rate, slightly lower Nifty (coefficient -0.0823).</p>
-      </div>
-      <div class="ctl">
-        <div class="ctl-top"><label for="gdp">Nominal GDP (USD billion)<span class="badge sig">significant</span></label>
-          <input class="num" id="gdpN" type="number" step="10" min="1"></div>
-        <input id="gdp" type="range" min="500" max="6000" step="10">
-        <p class="hint">1% more GDP, about 1.53% higher Nifty (coefficient +1.5284).</p>
-      </div>
-      <div class="ctl">
-        <div class="ctl-top"><label for="cpi">CPI (1960 = 100)<span class="badge nosig">not significant</span></label>
-          <input class="num" id="cpiN" type="number" step="10" min="1"></div>
-        <input id="cpi" type="range" min="2000" max="12000" step="10">
-        <p class="hint">Higher CPI, slightly lower Nifty (coefficient -0.2437).</p>
-      </div>
-    </section>
-
-    <section class="card" aria-label="Result">
-      <h2>Model estimate</h2>
-      <div class="big" id="out">0</div>
-      <p class="lbl">Estimated Nifty 50 level</p>
-      <div class="bars" id="bars"></div>
-      <p class="verdict" id="verdict"></p>
-      <div class="note" id="note" hidden></div>
-      <div class="elast">
-        <div class="el"><b>-0.08</b><span>Repo rate</span></div>
-        <div class="el"><b>+1.53</b><span>GDP</span></div>
-        <div class="el"><b>-0.24</b><span>CPI</span></div>
-      </div>
-      <p class="hint" style="text-align:center">Elasticities: if an input rises 1%, the Nifty changes by this many %.</p>
-    </section>
-  </div>
-
-  <footer>
-    <p class="caveat">Teaching tool, not investment advice. In the paper only GDP is statistically significant; the repo rate and CPI effects cannot be told apart from zero. Correlation is not causation.</p>
-    <p><b>Model source:</b> Jain, N. (2025). A Study of Repo Rate’s Impact on The Indian Stock Market. <i>Educational Administration: Theory and Practice, 31</i>(1), 748-751.
-      <a href="https://doi.org/10.67145/kuey.v31i1.9983" target="_blank" rel="noopener">https://doi.org/10.67145/kuey.v31i1.9983</a> (CC BY 4.0)</p>
-    <details>
-      <summary>How the model and data work</summary>
-      <p>The paper’s log-log regression is ln(Nifty) = α + β₁ln(Repo) + β₂ln(GDP) + β₃ln(CPI), fitted on 24 annual observations (March 2001 to March 2024) with adjusted R² of 94.9%. The paper reports the three coefficients but not the intercept α or the raw data, so α here is calibrated so that the model fits the six historical snapshots on average. Because of that, absolute levels are indicative; the sensitivities to each input come directly from the paper.</p>
-      <p>Snapshot data: Nifty closes and repo rates are 31 March values. GDP is approximate World Bank nominal GDP for the calendar year. CPI is CPI-IW (fiscal-year average) linked to a 1960 base using official linking factors, so treat it as approximate.</p>
-    </details>
-  </footer>
+<section class="card" aria-labelledby="output-title">
+<h2 id="output-title">2. Read the model output</h2><p class="intro">This is a model-estimated level, not a forecast or guaranteed future value.</p>
+<div class="result-label">Model-estimated NIFTY 50 level</div><div class="big" id="out" aria-live="polite">—</div><p class="muted" id="snapshot-label">Select a historical baseline to begin.</p>
+<div class="change-grid"><div class="stat"><strong id="delta">—</strong><span>Estimated change vs. baseline model output</span></div><div class="stat"><strong id="actual">—</strong><span>Historical baseline: observed NIFTY 50 close</span></div></div>
+<div class="bars" id="bars"></div>
+<div class="callout" id="comparison">Choose a historical reference point. The simulator will show how changing inputs shifts the model estimate relative to that baseline.</div>
+<div class="note" id="event-note" hidden></div>
+</section>
 </div>
 
+<section class="card full">
+<h2>3. The regression behind the simulator</h2><p class="intro">The simulator uses the coefficients reported in the published study.</p>
+<div class="equation">ln(NIFTY 50) = α − 0.0823 ln(Repo Rate) + 1.5284 ln(Nominal GDP) − 0.2437 ln(CPI) + ε</div>
+<p class="prose">In this log–log specification, each slope coefficient is an estimated elasticity: it describes the percentage association between a 1% change in an explanatory variable and the NIFTY 50, holding the other included variables constant. These are conditional associations, not causal effects.</p>
+<div class="table-wrap"><table><thead><tr><th>Explanatory variable</th><th>Coefficient</th><th>Reported p-value</th><th>Statistical interpretation</th></tr></thead><tbody>
+<tr><td>Repo rate</td><td class="num">−0.0823</td><td class="num">0.677</td><td>Not statistically significant at the 5% level.</td></tr>
+<tr><td>Nominal GDP</td><td class="num">+1.5284</td><td class="num">0.000*</td><td>Statistically significant at the 5% level.</td></tr>
+<tr><td>CPI</td><td class="num">−0.2437</td><td class="num">0.568</td><td>Not statistically significant at the 5% level.</td></tr>
+</tbody></table></div>
+<p class="help">Reported adjusted R² = 94.9%. *A displayed p-value of 0.000 is rounded; it should be interpreted as p &lt; 0.001, not literally zero.</p>
+<h3 style="font-size:15px;margin:20px 0 8px">Understanding the results</h3>
+<div class="explain-grid">
+<div class="explain"><b>Adjusted R²</b><p>A high adjusted R² indicates that the model fits the historical sample well, accounting for the number of explanatory variables. It is not 94.9% predictive accuracy.</p></div>
+<div class="explain"><b>p-values</b><p>Each p-value assesses evidence against a zero-coefficient null hypothesis, conditional on the specified model. An insignificant result does not prove that the variable has no economic effect.</p></div>
+<div class="explain"><b>Association ≠ causation</b><p>The regression identifies estimated relationships in the sample. It does not establish that repo rates, GDP or CPI cause movements in the NIFTY 50.</p></div>
+</div>
+</section>
+
+<section class="card full">
+<h2>4. Guided classroom experiments</h2><p class="intro">Run a scenario, observe the model response, and discuss what the regression can—and cannot—tell us.</p>
+<div class="experiment-list">
+<div class="experiment"><h3>Interest-rate shock</h3><p>Raise the repo rate while holding GDP and CPI at their current settings.</p><button type="button" id="exp-repo">Run experiment</button><div class="question"><strong>Reflect</strong>Why should the small, statistically insignificant repo coefficient be interpreted cautiously?</div></div>
+<div class="experiment"><h3>Inflation scenario</h3><p>Increase CPI and examine the estimated response alongside its p-value.</p><button type="button" id="exp-cpi">Run experiment</button><div class="question"><strong>Reflect</strong>How might inflation affect firms, consumers and valuations even when this coefficient is insignificant?</div></div>
+<div class="experiment"><h3>Growth scenario</h3><p>Increase nominal GDP and compare the model response with the reported significance.</p><button type="button" id="exp-gdp">Run experiment</button><div class="question"><strong>Reflect</strong>Why might GDP have a stronger statistical relationship with the index in this sample?</div></div>
+</div>
+</section>
+
+<section class="card full">
+<h2>5. Methodology, data and limitations</h2>
+<div class="prose">
+<p><b>Research objective.</b> The study investigates the statistical relationship between India's NIFTY 50 and three macroeconomic indicators: the policy repo rate, nominal GDP and the Consumer Price Index. The simulator was built to make the reported regression easier for students and teachers to explore interactively.</p>
+<p><b>Observation period and frequency.</b> The published regression is described as using 24 annual observations spanning March 2001 to March 2024. These are annual observations, not 24 years of monthly observations. The initial ten-year monthly analysis is a separate stage of the wider research and is not the dataset powering this simulator.</p>
+<p><b>Variables and transformation.</b> The model is specified in logarithms (a log–log form). The explanatory variables are repo rate, nominal GDP and CPI; the dependent variable is the NIFTY 50 index. The coefficients can therefore be read as estimated elasticities, holding the other regressors constant.</p>
+<p><b>Data used in the interactive historical comparisons.</b> The six illustrative snapshots in this interface combine March-end NIFTY 50 closes and repo rates, approximate calendar-year nominal GDP in USD billions, and a linked CPI series. The original raw estimation dataset and full estimated intercept are not embedded in the paper information available to this interface. The source and construction of the illustrative snapshot series are therefore not equivalent to a reproducible copy of the paper's estimation dataset.</p>
+</div>
+<details><summary>Why are absolute model levels described as indicative?</summary><div class="prose"><p>The article reports the three slope coefficients but the simulator does not have the original full estimation dataset and estimated intercept. For the interactive display, the intercept is calibrated to the six historical snapshots included here. The absolute model-estimated level is therefore illustrative. The relative change generated when a user changes inputs follows the reported coefficients, but the simulator must not be treated as a faithful replication of the paper's original fitted values or as a forecasting model.</p></div></details>
+<details><summary>Limitations to keep in mind</summary><div class="prose"><ul><li><b>Small sample:</b> 24 annual observations provide limited degrees of freedom.</li><li><b>Potential multicollinearity:</b> macroeconomic variables may move together; this can affect coefficient precision. No diagnostic result is claimed here.</li><li><b>Omitted variables:</b> earnings, interest rates beyond the repo rate, exchange rates, global liquidity, investor sentiment and geopolitical shocks can also influence equity prices.</li><li><b>Structural change:</b> India's economy and financial markets have changed over the observation period, so relationships may not remain stable.</li><li><b>Historical fit is not a future guarantee:</b> a high adjusted R² does not establish out-of-sample forecasting performance.</li><li><b>Snapshot comparability:</b> the illustrative inputs use different reference conventions and should not be interpreted as a formal out-of-sample test.</li></ul></div></details>
+</section>
+
+<section class="card full"><h2>About the researcher</h2><p class="author">I’m Naytik Jain, a high school student from Delhi, India, interested in finance, economics and politics. I’m particularly curious about how economic policy, financial markets and data can help explain the forces shaping an economy.</p></section>
+<footer class="footer"><p class="caution">Educational use only. This simulator is not investment advice and should not be used to make trading decisions.</p>
+<p><b>Research paper:</b> Jain, N. (2025). A study of repo rate’s impact on the Indian stock market. <i>Educational Administration: Theory and Practice, 31</i>(1), 748–751. <a href="https://doi.org/10.67145/kuey.v31i1.9983" target="_blank" rel="noopener noreferrer">https://doi.org/10.67145/kuey.v31i1.9983</a>.</p>
+<p>© The Market Model Lab · Research coefficients and reported statistics are attributed to the cited study.</p></footer>
+</main>
 <script>
-(function () {
-  // Coefficients from Jain (2025)
-  var B = { repo: -0.0823, gdp: 1.5284, cpi: -0.2437 };
-
-  // [repo %, GDP USD bn, CPI 1960=100, actual Nifty close]
-  var EVENTS = [
-    { name: "2008 financial crisis", note: "Global crash. The repo rate was cut and GDP in USD kept rising, yet the Nifty fell about 36%. The model cannot see panic or foreign capital flight, so it misses badly.",
-      pts: [["Mar 2008", 7.75, 1199, 3172, 4734.50], ["Mar 2009", 5.00, 1342, 3309, 3020.95]] },
-    { name: "2016 demonetisation", note: "Cash ban in November 2016. The Nifty still rose over the year, and the model gets the direction right.",
-      pts: [["Mar 2016", 6.75, 2295, 6002, 7738.40], ["Mar 2017", 6.25, 2652, 6299, 9173.75]] },
-    { name: "2020 lockdown", note: "COVID lockdown. Markets crashed in March 2020 and then rallied as rates were cut. Annual data hides the crash itself.",
-      pts: [["Mar 2020", 4.40, 2672, 7325, 8597.75], ["Mar 2021", 4.00, 3150, 7754, 14690.70]] }
-  ];
-
-  function core(r, g, c) {
-    return B.repo * Math.log(r) + B.gdp * Math.log(g) + B.cpi * Math.log(c);
-  }
-  // Intercept calibrated on the six snapshots (mean log error = 0)
-  var all = [];
-  EVENTS.forEach(function (e) { e.pts.forEach(function (p) { all.push(p); }); });
-  var ALPHA = all.reduce(function (s, p) {
-    return s + Math.log(p[4]) - core(p[1], p[2], p[3]);
-  }, 0) / all.length;
-  function predict(r, g, c) { return Math.exp(ALPHA + core(r, g, c)); }
-
-  var $ = function (id) { return document.getElementById(id); };
-  var fmt = function (n) { return Math.round(n).toLocaleString("en-IN"); };
-  var keys = ["repo", "gdp", "cpi"];
-  var active = null;
-
-  // Build preset buttons
-  var host = $("presets");
-  EVENTS.forEach(function (e, ei) {
-    var t = document.createElement("div"); t.className = "evt"; t.textContent = e.name; host.appendChild(t);
-    var row = document.createElement("div"); row.className = "chips"; host.appendChild(row);
-    e.pts.forEach(function (p, pi) {
-      var b = document.createElement("button");
-      b.type = "button"; b.className = "chip"; b.textContent = p[0];
-      b.dataset.id = ei + "-" + pi;
-      b.onclick = function () { load(ei, pi); };
-      row.appendChild(b);
-    });
-  });
-
-  function setInputs(r, g, c) {
-    [r, g, c].forEach(function (v, i) { $(keys[i]).value = v; $(keys[i] + "N").value = v; });
-  }
-  function load(ei, pi) {
-    var p = EVENTS[ei].pts[pi];
-    setInputs(p[1], p[2], p[3]);
-    active = { e: ei, p: pi };
-    render();
-  }
-  function read() {
-    return keys.map(function (k) { return parseFloat($(k + "N").value); });
-  }
-
-  function bar(name, v, max, color) {
-    return '<div class="bar-row"><span>' + name + '</span><div class="track"><div class="fill" style="width:' +
-      (100 * v / max).toFixed(1) + '%;background:' + color + '"></div></div><span class="val">' + fmt(v) + '</span></div>';
-  }
-
-  function render() {
-    var v = read();
-    if (v.some(function (x) { return !(x > 0); })) return;
-    var model = predict(v[0], v[1], v[2]);
-    $("out").textContent = fmt(model);
-
-    document.querySelectorAll(".chip").forEach(function (c) {
-      c.classList.toggle("on", !!active && c.dataset.id === active.e + "-" + active.p);
-    });
-
-    var bars = $("bars"), verdict = $("verdict"), note = $("note");
-    if (active) {
-      var ev = EVENTS[active.e], actual = ev.pts[active.p][4];
-      var max = Math.max(model, actual) * 1.05;
-      bars.innerHTML = bar("Model", model, max, "var(--accent)") + bar("Actual", actual, max, "var(--accent2)");
-      var err = (model / actual - 1) * 100;
-      verdict.textContent = "The model is " + Math.abs(err).toFixed(1) + "% " + (err > 0 ? "above" : "below") + " the real Nifty close.";
-      note.hidden = false; note.textContent = ev.note;
-    } else {
-      bars.innerHTML = bar("Model", model, model * 1.05, "var(--accent)");
-      verdict.textContent = "Pick a historical date above to compare with the real Nifty 50.";
-      note.hidden = true;
-    }
-  }
-
-  // Wire up slider and number boxes (typing or dragging leaves preset mode)
-  keys.forEach(function (k) {
-    $(k).addEventListener("input", function () { $(k + "N").value = $(k).value; active = null; render(); });
-    $(k + "N").addEventListener("input", function () {
-      var x = parseFloat($(k + "N").value);
-      if (x > 0) $(k).value = x;
-      active = null; render();
-    });
-  });
-
-  // Theme toggle
-  var root = document.documentElement;
-  $("theme").onclick = function () {
-    var dark = root.dataset.theme ? root.dataset.theme === "dark"
-      : window.matchMedia("(prefers-color-scheme: dark)").matches;
-    root.dataset.theme = dark ? "light" : "dark";
-    $("theme").textContent = dark ? "Dark mode" : "Light mode";
-  };
-  if (window.matchMedia("(prefers-color-scheme: dark)").matches) $("theme").textContent = "Light mode";
-
-  load(0, 1);
+(function(){
+"use strict";
+const B={repo:-0.0823,gdp:1.5284,cpi:-0.2437};
+const EVENTS=[
+{name:"2008 financial crisis",note:"The global financial crisis coincided with a sharp market fall. The regression does not include shocks such as panic, global credit conditions or foreign portfolio outflows.",pts:[["Mar 2008",7.75,1199,3172,4734.50],["Mar 2009",5.00,1342,3309,3020.95]]},
+{name:"2016 demonetisation",note:"Demonetisation occurred in November 2016. These March snapshots cannot isolate the policy's effect on the market.",pts:[["Mar 2016",6.75,2295,6002,7738.40],["Mar 2017",6.25,2652,6299,9173.75]]},
+{name:"2020 lockdown",note:"The pandemic caused substantial market volatility. Annual snapshots conceal the sharp intrayear fall and subsequent recovery.",pts:[["Mar 2020",4.40,2672,7325,8597.75],["Mar 2021",4.00,3150,7754,14690.70]]}
+];
+const $=id=>document.getElementById(id),keys=["repo","gdp","cpi"];
+const points=EVENTS.flatMap(e=>e.pts);
+function core(r,g,c){return B.repo*Math.log(r)+B.gdp*Math.log(g)+B.cpi*Math.log(c);}
+const alpha=points.reduce((s,p)=>s+Math.log(p[4])-core(p[1],p[2],p[3]),0)/points.length;
+function estimate(r,g,c){return Math.exp(alpha+core(r,g,c));}
+const fmt=n=>Math.round(n).toLocaleString("en-IN");
+let active=null,baseline=null;
+function inputs(){return keys.map(k=>Number($(k+"N").value));}
+function setInputs(v){keys.forEach((k,i)=>{$(k+"N").value=v[i];$(k).value=Math.max(Number($(k).min),Math.min(Number($(k).max),v[i]));});}
+function load(ei,pi){const p=EVENTS[ei].pts[pi];setInputs(p.slice(1,4));active={ei,pi};baseline={values:p.slice(1,4),model:estimate(...p.slice(1,4)),actual:p[4],label:p[0]};render();}
+function buildPresets(){const host=$("presets");EVENTS.forEach((e,ei)=>{const title=document.createElement("div");title.className="event-group";title.textContent=e.name;host.append(title);const row=document.createElement("div");row.className="chips";e.pts.forEach((p,pi)=>{const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=p[0];b.dataset.key=ei+"-"+pi;b.addEventListener("click",()=>load(ei,pi));row.append(b);});host.append(row);});}
+function render(){const v=inputs();if(v.some(x=>!Number.isFinite(x)||x<=0)){ $("out").textContent="—";$("comparison").textContent="Enter positive values for all three inputs.";return;}
+const model=estimate(...v);$("out").textContent=fmt(model);
+document.querySelectorAll(".chip").forEach(b=>b.classList.toggle("active",!!active&&b.dataset.key===active.ei+"-"+active.pi));
+if(!baseline){$("snapshot-label").textContent="No historical baseline selected.";$("delta").textContent="—";$("actual").textContent="—";$("bars").replaceChildren();$("comparison").textContent="Select a historical reference point to establish a baseline.";return;}
+const pct=(model/baseline.model-1)*100,delta=model-baseline.model;
+$("snapshot-label").textContent="Reference: "+baseline.label+" · inputs compared with this snapshot";
+$("delta").textContent=(pct>=0?"+":"")+pct.toFixed(2)+"%";
+$("actual").textContent=fmt(baseline.actual);
+$("bars").innerHTML="";
+const max=Math.max(model,baseline.model,baseline.actual)*1.05;
+addBar("Current model estimate",model,max,false);addBar("Baseline model estimate",baseline.model,max,false);addBar("Observed historical close",baseline.actual,max,true);
+$("comparison").textContent="Changing the inputs moves the model estimate by "+(delta>=0?"+":"")+fmt(delta)+" index points ("+(pct>=0?"+":"")+pct.toFixed(2)+"%) relative to the baseline model output. The observed close is shown as historical context, not as a prediction target.";
+const ev=EVENTS[active.ei];$("event-note").hidden=false;$("event-note").textContent=ev.name+": "+ev.note;
+}
+function addBar(label,value,max,actual){const wrap=document.createElement("div"),head=document.createElement("div"),track=document.createElement("div"),fill=document.createElement("div");head.className="bar-head";const l=document.createElement("span"),v=document.createElement("strong");l.textContent=label;v.textContent=fmt(value);head.append(l,v);track.className="track";fill.className="fill"+(actual?" actual":"");fill.style.width=Math.min(100,value/max*100)+"%";track.append(fill);wrap.append(head,track);$("bars").append(wrap);}
+keys.forEach(k=>{$(k).addEventListener("input",()=>{$(k+"N").value=$(k).value;active=null;render();});$(k+"N").addEventListener("input",()=>{const n=Number($(k+"N").value);if(Number.isFinite(n)&&n>0)$(k).value=Math.max(Number($(k).min),Math.min(Number($(k).max),n));active=null;render();});});
+$("exp-repo").addEventListener("click",()=>{if(!baseline)load(0,1);const x=inputs();x[0]=Math.min(12,x[0]*1.25);setInputs(x);active=null;render();});
+$("exp-cpi").addEventListener("click",()=>{if(!baseline)load(0,1);const x=inputs();x[2]=Math.min(12000,x[2]*1.10);setInputs(x);active=null;render();});
+$("exp-gdp").addEventListener("click",()=>{if(!baseline)load(0,1);const x=inputs();x[1]=Math.min(6000,x[1]*1.10);setInputs(x);active=null;render();});
+buildPresets();load(0,1);
 })();
 </script>
-</body>
-</html>
+</body></html>
